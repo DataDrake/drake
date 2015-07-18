@@ -17,6 +17,10 @@ module Drake
           case args.length
             when 1
               say "Executing all rakes for group: #{args[0]}"
+              result = Drake.group( args[0] )
+              if result.is_a? Drake::Error
+                say_error result.message
+              end
             when 2
               say "Executing #{args[1]} for group: #{args[0]}"
             else
