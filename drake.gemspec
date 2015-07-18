@@ -9,4 +9,7 @@ Gem::Specification.new do |s|
   s.files       =  Dir.glob('lib/**/*') + %w(LICENSE README.md)
   s.homepage    = 'http://rubygems.org/gems/drake'
   s.license     = 'GPL v3'
+  s.executables = ['bin/drake']
+  s.add_runtime_dependency 'commander'
+  s.add_runtime_dependency 'net-ssh'
 end
