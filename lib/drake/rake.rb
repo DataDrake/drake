@@ -4,8 +4,10 @@ module Drake
   module Rake
     def rake( task , host)
       if File.exists? "#{task}.rake"
-        s = `rake REMOTE_HOST=#{host} -f #{task}.rake 2>&1`
-        puts s
+        output =  `rake --trace REMOTE_HOST=#{host} -f #{task}.rake 2>&1`
+        output.each_line do |l|
+          say_warning "\u{2502}  \u{2502}  #{l.strip}"
+        end
       else
         Drake::Error.new( "ERROR: #{task}.rake not found" )
       end
