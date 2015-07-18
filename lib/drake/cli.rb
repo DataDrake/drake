@@ -1,5 +1,5 @@
 require 'commander'
-require_relative 'drake'
+require_relative '../../lib/drake'
 
 module Drake
   class CLI
