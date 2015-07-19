@@ -109,7 +109,6 @@ module Drake
       end
     end
 
-    alias_method :packages, :package
     def packages( mode , list = nil )
       case mode
         when :add
@@ -124,5 +123,6 @@ module Drake
           say_error '[PACKAGES] Error: mode not supported'
       end
     end
+    alias_method :package, :packages
   end
 end
