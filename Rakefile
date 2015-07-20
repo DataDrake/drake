@@ -5,5 +5,5 @@ task :build do
 end
 
 task :release => :build do
-  system "gem push drake-#{Drake::VERSION}"
+  system "gem push drake-#{Drake::VERSION}.gem"
 end
