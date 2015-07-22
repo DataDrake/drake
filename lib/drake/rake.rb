@@ -1,4 +1,5 @@
 require_relative '../../lib/drake'
+require 'net/ssh'
 require 'rake'
 
 class DrakeProc
@@ -29,14 +30,21 @@ end
 module Drake
   module RAKE
     def rake( task , host)
-      if File.exists? "./#{task}.rake"
-        rake = Rake.application
-        rake.init
-        path = `pwd`.strip + '/'
-        rake.rake_require( "#{task}", [path])
-        rake['default'].invoke
-      else
-        Drake::Error.new( "ERROR: #{task}.rake not found" )
+      begin
+        Net::SSH.start(host, 'bryan') do |ssh|
+          $ssh = ssh
+          if File.exists? "./#{task}.rake"
+            rake = Rake.application
+            rake.init
+            path = `pwd`.strip + '/'
+            rake.rake_require( "#{task}", [path])
+            rake['default'].invoke
+          else
+            Drake::Error.new( "ERROR: #{task}.rake not found" )
+          end
+        end
+      rescue
+        say_error "[SSH] Could not connect to host #{host}"
       end
     end
   end
