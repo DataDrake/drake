@@ -2,12 +2,10 @@ module Drake
   module Packages
 
     def package_manager
-      `which apt`
-      if $?.success?
+      if execute 'which apt'
         return :apt
       end
-      `which yum`
-      if $?.success?
+      if execute 'which yum'
         return :yum
       end
       :nil
@@ -25,11 +23,9 @@ module Drake
       success = false
       case package_manager
         when :apt
-          puts `apt-get install -y #{list}`
-          success = $?.success?
+          success = execute "apt-get install -y #{list}"
         when :yum
-          puts `yum install -y #{list}`
-          success = $?.success?
+          success = execute "yum install -y #{list}"
         else
           say_error '[PACKAGES] Error: could not find supported package manager'
       end
@@ -52,11 +48,9 @@ module Drake
       success = false
       case package_manager
         when :apt
-          puts `apt-get remove -y #{list}`
-          success = $?.success?
+          success = execute "apt-get remove -y #{list}"
         when :yum
-          puts `yum remove -y #{list}`
-          success = $?.success?
+          success = execute "yum remove -y #{list}"
         else
           say_error '[PACKAGES] Error: could not find supported package manager'
       end
@@ -75,11 +69,9 @@ module Drake
       success = false
       case package_manager
         when :apt
-          puts `apt-get upgrade -y #{list}`
-          success = $?.success?
+          success = execute "apt-get upgrade -y #{list}"
         when :yum
-          puts `yum upgrade -y #{list}`
-          success = $?.success?
+          success = execute "yum upgrade -y #{list}"
         else
           say_error '[PACKAGES] Error: could not find supported package manager'
       end
@@ -94,11 +86,9 @@ module Drake
       success = false
       case package_manager
         when :apt
-          puts `apt-get update`
-          success = $?.success?
+          success = execute "apt-get update"
         when :yum
-          puts `yum check-update`
-          success = $?.success?
+          success = execute "yum check-update"
         else
           say_error '[PACKAGES] Error: could not find supported package manager'
       end
@@ -112,12 +102,14 @@ module Drake
     def packages( mode , list = nil )
       case mode
         when :add
+          package_list_update
           package_add( list )
         when :remove
           package_remove( list )
         when :update
           package_list_update
         when :upgrade
+          package_list_update
           package_upgrade( list )
         else
           say_error '[PACKAGES] Error: mode not supported'

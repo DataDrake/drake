@@ -8,5 +8,17 @@ module Drake
     extend Commander::UI
     extend Drake::Console
     extend Drake::Packages
+
+    def self.execute(command)
+      $ssh.exec!(command) do |channel,stream,data|
+        case stream
+          when :stderr
+            say_warning data
+          else
+            say data
+        end
+      end
+      $?.exitstatus
+    end
   end
 end
